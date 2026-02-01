@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# This script compares the staged patch with the patch from a specified commit (defaulting
+# to REBASE_HEAD if no commit is provided).  It is useful for reviewing changes during a
+# rebase.  It can be installed as a git subcommand named "git diff-staged-vs" by placing
+# it in your PATH.
+nvim -d <(git show "${1:-REBASE_HEAD}") <(git diff --staged)
