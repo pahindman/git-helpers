@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+base_branch=$1
+if [[ "$base_branch" == "--help" ]]; then
+    echo "Usage: $0 [base-branch-name]"
+    echo "Prompts for removing branches that are merged into a specified base branch."
+    exit 1
+fi
+
+branch_list="$(git branch --format='%(refname:short)')"
+if [[ -z "$base_branch" || "$branch_list" != *"$base_branch"* ]]; then
+    git branch --format='%(refname:short)'
+    read -r -p "Which of the above branches do you want to treat as the base branch? " base_branch
+fi
+
+if [[ "$base_branch" == "" ]]; then
+    exit 1
+fi
+
+# Get a list of all local branches that are merged into the base branch
+for branch in $(git branch --merged "${base_branch}" --format='%(refname:short)'); do
+    if [[ "$branch" != "$base_branch" ]]; then
+        read -r -p "Do you want to remove $branch? (y/n) " answer
+        if [[ "$answer" == "y" ]]; then
+            git branch -d "$branch"
+        fi
+    fi
+done
