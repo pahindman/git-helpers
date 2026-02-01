@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# This script shows git commits where the difference between the commit date and author
+# date is more than a specified number of days (default is 14 days), or the commit date is
+# before the author date. This can help identify "time-travelling" commits where the
+# commit date is significantly different than when the changes were authored.
+
+LONGOPTS=days:
+SHORTOPTS=d:
+PROGRAM_NAME=$(basename "$0")
+
+source getopt.bash
+
+days=14
+
+while true; do
+    opt=$1
+    shift
+    case "$opt" in
+        -d|--days)
+            days="$1"
+            shift
+            ;;
+        --)
+            break
+            ;;
+        *)
+            echo "Error: getopt was configured incorrectly."
+            echo "Error: Contact the author of '$PROGRAM_NAME'."
+            exit 3
+            ;;
+    esac
+done
+
+rev=${1:-HEAD}
+
+if (( days <= 0 )); then
+    echo "Error: --days must be a positive integer" >&2
+    exit 1
+fi
+
+declare -a commits
+
+US=$'\x1F'
+while IFS=$US read -r sha commit_date author_date; do
+	commit_date_seconds=$(date -d "$commit_date" +%s)
+	author_date_seconds=$(date -d "$author_date" +%s)
+	difference=$(( (commit_date_seconds - author_date_seconds) / 86400 ))
+	if [ $difference -gt "${days}" ] || [ "$commit_date_seconds" -lt "$author_date_seconds" ]; then
+		commits+=("$sha")
+	fi
+done < <(git log "$rev" --pretty=format:"%h${US}%cd${US}%ad%n" --date=short)
+
+if [ ${#commits[@]} -ne 0 ]; then
+	git show --no-patch "${commits[@]}"
+fi
