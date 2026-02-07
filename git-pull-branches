@@ -30,30 +30,33 @@ set_exit_status() {
 
 try_to_pull_changes_on_branch() {
     local branch="$1"
-    git checkout "$branch" > /dev/null 2>&1
+    if git checkout "$branch" > /dev/null 2>&1; then
+		local before
+		before=$(git rev-parse HEAD) 2>/dev/null
+		if git pull > /dev/null 2>&1; then
+			[ -n "$verbose" ] && echo -n "Git pull on branch '$branch' worked" >&2
+			local after
+			after=$(git rev-parse HEAD) 2>/dev/null
 
-    local before
-    before=$(git rev-parse HEAD) 2>/dev/null
-    if git pull > /dev/null 2>&1; then
-        [ -n "$verbose" ] && echo -n "Git pull on branch '$branch' worked" >&2
-        local after
-        after=$(git rev-parse HEAD) 2>/dev/null
-
-        if [ "$before" != "$after" ]; then
-            [ -n "$verbose" ] && echo " and did something (will iterate again)" >&2
-            made_changes=1
-            updated_branches[$branch]=$branch
-        else
-            [ -n "$verbose" ] && echo " but did nothing" >&2
-        fi
-    else
-        [ -n "$verbose" ] && echo "Git pull failed on branch '$branch'" >&2
-        failed_branches[$branch]=$branch
-        # We don't know if 'git pull' is configured for merging or rebasing for this
-        # branch, but it doesn't matter, just abort both types
-        git merge --abort > /dev/null 2>&1
-        git rebase --abort > /dev/null 2>&1
-    fi
+			if [ "$before" != "$after" ]; then
+				[ -n "$verbose" ] && echo " and did something (will iterate again)" >&2
+				made_changes=1
+				updated_branches[$branch]=$branch
+			else
+				[ -n "$verbose" ] && echo " but did nothing" >&2
+			fi
+		else
+			[ -n "$verbose" ] && echo "Git pull failed on branch '$branch'" >&2
+			failed_branches[$branch]=$branch
+			# We don't know if 'git pull' is configured for merging or rebasing for this
+			# branch, but it doesn't matter, just abort both types
+			git merge --abort > /dev/null 2>&1
+			git rebase --abort > /dev/null 2>&1
+		fi
+	else
+		[ -n "$verbose" ] && echo "Git checkout failed on branch '$branch'" >&2
+		failed_branches[$branch]=$branch
+	fi
 }
 
 echo_num_branches() {
