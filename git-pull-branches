@@ -19,7 +19,7 @@ if [ -z "$original_branch" ]; then
     original_branch=$(git rev-parse HEAD)
 fi
 
-previous_branch=$(git rev-parse --abbrev-ref @\{-1\})
+previous_branch=$(git rev-parse --abbrev-ref @\{-1\} 2>/dev/null)
 if [ -z "$previous_branch" ]; then
     previous_branch=$(git rev-parse @\{-1\} 2>/dev/null)
 fi
