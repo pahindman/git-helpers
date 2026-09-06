@@ -1,3 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-nvim -d <(git show --format=fuller "${1}") <(git show --format=fuller "${2}")
+trap 'rm -rf "$tmp_dir"' EXIT
+tmp_dir=$(mktemp -d)
+
+git show --format=fuller "$1" > "$tmp_dir/$1"
+git show --format=fuller "$2" > "$tmp_dir/$2"
+
+git difftool --no-index "$tmp_dir/$1" "$tmp_dir/$2"
