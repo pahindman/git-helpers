@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# git commands that show the status of the branch with respect to the corresponding remote
+# branch (e.g. 'git branch -vv') use the "upstream" branch (i.e. the "pull upstream"). But
+# if you have separate remotes for push vs pull, you may also be interested in the status
+# of the branch with respect to the "push upstream".  Seeing status with respect to the
+# "pull upstream" tells you if you need to 'git pull' on any of the local branches, but
+# seeing status with respect to the "push upstream" tells you if you need to 'git push' on
+# any of the local branches.  This custom subcommand gives you an easy way to see the
+# status for the push remote.  If there is no configured pushRemote for a branch then this
+# subcommand falls back to show the information for the remote, or the default (origin).
+# If a branch has not been pushed anywhere (i.e. there is no remote tracking branch) then
+# that is also indicated.
+
+branch_statuses=()
+
+# Colors using $'...' syntax so bash interprets the escape sequences
+RED=$'\033[0;31m'
+YELLOW=$'\033[0;33m'
+GREEN=$'\033[0;32m'
+CYAN=$'\033[0;36m'
+NC=$'\033[0m' # No Color
+
+for local_branch in $(git branch --format='%(refname:short)'); do
+	push_remote=$(git config --get "branch.$local_branch.pushRemote" 2>/dev/null || \
+                      git config --get remote.pushDefault 2>/dev/null || \
+                      git config --get "branch.$local_branch.remote" 2>/dev/null)
+	tracking_branch="refs/remotes/${push_remote}/$local_branch"
+	if git cat-file -e "$tracking_branch" 2>/dev/null; then
+			suffix_msg=""
+	else
+			tracking_branch=$(git config --get "branch.$local_branch.merge" 2>/dev/null)
+			abbrev_tracking_branch=$(git rev-parse --abbrev-ref "$tracking_branch")
+			suffix_msg=" ${CYAN}(tracking local $abbrev_tracking_branch)$NC"
+	fi
+
+	behind=$(git rev-list --count "$local_branch..$tracking_branch" 2>/dev/null)
+	ahead=$(git rev-list --count "$tracking_branch..$local_branch" 2>/dev/null)
+	if [ "$ahead" -gt 0 ] || [ "$behind" -gt 0 ]; then
+		if [ "$ahead" -gt 0 ] && [ "$behind" -gt 0 ]; then
+			branch_statuses+=("$local_branch: ${RED}[$ahead ahead, $behind behind]$NC$suffix_msg")
+		elif [ "$ahead" -gt 0 ]; then
+			branch_statuses+=("$local_branch: ${YELLOW}[$ahead ahead]$NC$suffix_msg")
+		else
+			branch_statuses+=("$local_branch: ${RED}[$behind behind]$NC$suffix_msg")
+		fi
+	else
+		branch_statuses+=("$local_branch: ${GREEN}[up to date]$NC$suffix_msg")
+	fi
+done
+
+for p in "${branch_statuses[@]}"; do
+	echo "$p"
+done
