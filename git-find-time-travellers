@@ -5,11 +5,10 @@
 # before the author date. This can help identify "time-travelling" commits where the
 # commit date is significantly different than when the changes were authored.
 
-LONGOPTS=days:
-SHORTOPTS=d:
-PROGRAM_NAME=$(basename "$0")
+progname=${0##*/}
 
-source getopt.bash
+# shellcheck disable=SC1091
+source getopt.bash "d:" "days:" "$progname" "$@"
 
 days=14
 
@@ -26,7 +25,7 @@ while true; do
             ;;
         *)
             echo "Error: getopt was configured incorrectly."
-            echo "Error: Contact the author of '$PROGRAM_NAME'."
+            echo "Error: Contact the author of '$progname'."
             exit 3
             ;;
     esac
