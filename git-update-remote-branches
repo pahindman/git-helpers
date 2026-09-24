@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# This custom subcommand gives you an easy way to push branches that already have a remote
+# branch configured, i.e. it should not create new remote branches.  It considers, in
+# order, whether there is a pushRemote, a pushDefault, or a remote configured for the
+# branch, then looks for a tracking branch for that remote.  If a branch has not been
+# pushed anywhere (i.e. there is no remote tracking branch) then the branch is skipped.
+# Otherwise, it pushes the branch to the remote using --force-with-lease.
+
+verbose() {
+	[[ -v VERBOSE ]] && echo "$@" >&2
+}
+
+exit_code=0
+
+for local_branch in $(git branch --format='%(refname:short)'); do
+	push_remote=$(git config --get "branch.$local_branch.pushRemote" 2>/dev/null || \
+		git config --get remote.pushDefault 2>/dev/null || \
+		git config --get "branch.$local_branch.remote" 2>/dev/null)
+	tracking_branch="refs/remotes/${push_remote}/$local_branch"
+	if git cat-file -e "$tracking_branch" 2>/dev/null; then
+		behind=$(git rev-list --count "$local_branch..$tracking_branch" 2>/dev/null)
+		ahead=$(git rev-list --count "$tracking_branch..$local_branch" 2>/dev/null)
+		if (( ahead > 0 || behind > 0 )); then
+			verbose -n "Pushing $local_branch [$push_remote: behind $behind, ahead $ahead]... "
+			if git push "$push_remote" "$local_branch" --force-with-lease 2>/dev/null; then
+				verbose "ok"
+				echo "Pushed $local_branch to $push_remote" >&2
+			else
+				verbose "error"
+				echo "Failed to push $local_branch to $push_remote" >&2
+				exit_code=1
+			fi
+		else
+			verbose "$local_branch is up to date"
+		fi
+	else
+		verbose "No remote tracking branch for $local_branch"
+	fi
+done
+
+exit $exit_code
