@@ -1,0 +1,20 @@
+.TH GIT-CLEANUP-BRANCHES 1 "2026-09-30" "Git Helpers" "git-helpers Manual"
+.SH NAME
+git-cleanup-branches \- delete branches that are merged into the base branch
+.SH SYNOPSIS
+.B git cleanup-branches
+[\fIbase_branch\fR]
+.SH DESCRIPTION
+\fBgit\-cleanup\-branches\fR removes local branches that have already been merged
+into a chosen base branch. If you do not specify a base branch, it lists the
+available local branches and prompts you to choose one to use as the base branch.
+It then walks the merged branches and asks before deleting each candidate.
+.SH EXAMPLES
+.TP
+.B git cleanup-branches main
+Interactively delete merged branches using \fBmain\fR as the base branch.
+.TP
+.B git cleanup-branches
+Prompt for the base branch, then interactively delete merged branches.
+.SH SEE ALSO
+.BR git (1)

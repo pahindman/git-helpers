@@ -1,0 +1,17 @@
+.TH GIT-STATUS-PUSH 1 "2026-10-01" "Git Helpers" "git-helpers Manual"
+.SH NAME
+git-status-push \- show branch status relative to the push remote
+.SH SYNOPSIS
+.B git status-push
+.SH DESCRIPTION
+\fBgit-status-push\fR inspects each local branch and reports whether it is ahead,
+behind, or up to date with respect to its push remote. It prefers a branch-specific
+push remote, then falls back to a repository push default or the configured branch
+remote. If a branch has never been pushed, it is marked as such.
+.SH EXAMPLES
+.TP
+.B git status-push
+Display ahead/behind counts for all local branches.
+.SH SEE ALSO
+.BR git (1),
+.BR git-branch (1)

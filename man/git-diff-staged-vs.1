@@ -1,0 +1,20 @@
+.TH GIT-DIFF-STAGED-VS 1 "2026-10-01" "Git Helpers" "git-helpers Manual"
+.SH NAME
+git-diff-staged-vs \- compare staged changes against a commit or ref
+.SH SYNOPSIS
+.B git diff-staged-vs
+[IrefnameR]
+.SH DESCRIPTION
+\fBgit-diff-staged-vs\fR compares the current staged patch against a commit,
+merge state, or other ref. By default it uses \fBREBASE_HEAD\fR when no ref name
+is supplied, making it handy during rebases and review workflows.
+.SH EXAMPLES
+.TP
+.B git diff-staged-vs HEAD~1
+Compare the staged diff to the previous commit.
+.TP
+.B git diff-staged-vs REBASE_HEAD
+Compare the staged changes against the in-progress rebase target.
+.SH SEE ALSO
+.BR git (1),
+.BR git-difftool (1)

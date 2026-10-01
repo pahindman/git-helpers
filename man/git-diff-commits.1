@@ -1,0 +1,17 @@
+.TH GIT-DIFF-COMMITS 1 "2026-10-01" "Git Helpers" "git-helpers Manual"
+.SH NAME
+git-diff-commits \- compare two commits side by side
+.SH SYNOPSIS
+.B git diff-commits
+.IR COMMIT1 COMMIT2
+.SH DESCRIPTION
+\fBgit-diff-commits\fR opens a side-by-side diff between two commits using
+\fBgit difftool --no-index\fR. This is useful for reviewing what changed between
+revisions without leaving the terminal.
+.SH EXAMPLES
+.TP
+.B git diff-commits HEAD~3 HEAD
+Compare the current branch tip to the commit three revisions earlier.
+.SH SEE ALSO
+.BR git (1),
+.BR git-difftool (1)
