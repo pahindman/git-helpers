@@ -11,3 +11,11 @@ repos:
     entry: sh -c 'for file do groff -man -Tutf8 -z "$file" >/dev/null; done' --
     language: system
     files: '^man/.*$'
+  - id: relevant-bats-tests
+    name: Run Relevant Bats Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    # This tells pre-commit to install bats automatically
+    additional_dependencies:
+      - bats@1.11.0
+    pass_filenames: true
