@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+declare -A test_tags
+test_tags["git-diff-staged-vs"]="--filter-tags diff-staged-vs"
+test_tags["git-find-time-travellers"]="--filter-tags find-time-travellers"
+test_tags["git-diff-commits"]="--filter-tags diff-commits"
+test_tags["git-cleanup-branches"]="--filter-tags cleanup-branches"
+test_tags["git-pull-branches"]="--filter-tags pull-branches"
+test_tags["git-status-push"]="--filter-tags status-push"
+test_tags["git-update-remote-branches"]="--filter-tags update-remote-branches"
+
+# Run all tests if the bats-precommit-wrapper changes
+test_tags["test/bats-precommit-wrapper"]="--filter-tags !__none__"
+
+for file in "$@"; do
+	# Only add tags for files that have an entry in the test_tags associative array.
+	# This way we avoid adding empty strings to the tags array that might cause all
+	# tests to be run.
+	if [[ -v test_tags[${file}] ]]; then
+		tags+=("${test_tags[${file}]}")
+	fi
+done
+
+# Only run bats if there are tags to filter by. If there are no tags, it means that none
+# of the changed files have corresponding tests, so we can skip running bats entirely.
+if [ ${#tags[@]} -gt 0 ]; then
+	# Deliberately disable SC2068 to allow for the expansion of the tags array, so that
+	# --filter-tags and the corresponding tag arguments are passed as separate arguments to
+	# the bats command.
+	# shellcheck disable=SC2068
+	npx bats test ${tags[@]}
+fi
