@@ -4,3 +4,10 @@ repos:
   hooks:
   - id: shellcheck
     exclude: '^LICENSE$'
+- repo: local
+  hooks:
+  - id: manpage-syntax
+    name: Man page syntax check
+    entry: sh -c 'for file do groff -man -Tutf8 -z "$file" >/dev/null; done' --
+    language: system
+    files: '^man/.*$'
