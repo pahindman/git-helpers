@@ -1,0 +1,27 @@
+.TH GIT-FIND-TIME-TRAVELLERS 1 "2026-10-01" "Git Helpers" "git-helpers Manual"
+.SH NAME
+git-find-time-travellers \- find commits whose author and commit dates do not match
+.SH SYNOPSIS
+.B git find-time-travellers
+[B-dR IDAYSR] [IrevR]
+.SH DESCRIPTION
+\fBgit-find-time-travellers\fR lists commits where the commit date is more than
+\fIDAYS\fR days later than the author date, or where the commit date is earlier
+than the author date. This helps identify time-travelling commits that look
+suspicious or were created with mismatched metadata.
+.PP
+The default threshold is 14 days, and the default revision is \fBHEAD\fR.
+.SH OPTIONS
+.TP
+.BR -d , --days " " \fIDAYSR
+Set the threshold in days.
+.TP
+.B -h, --help
+Show usage information.
+.SH EXAMPLES
+.TP
+.B git find-time-travellers -d 30 HEAD
+List commits where the commit date differs from the author date by more than 30 days.
+.SH SEE ALSO
+.BR git (1),
+.BR git-log (1)
