@@ -11,11 +11,52 @@ repos:
     entry: sh -c 'for file do groff -man -Tutf8 -z "$file" >/dev/null; done' --
     language: system
     files: '^man/.*$'
-  - id: relevant-bats-tests
-    name: Run Relevant Bats Tests
+  - id: cleanup-branches-bats-tests
+    name: cleanup-branches Tests
     entry: test/bats-precommit-wrapper
     language: node
-    # This tells pre-commit to install bats automatically
     additional_dependencies:
-      - bats@1.11.0
-    pass_filenames: true
+    - bats@1.11.0
+    files: cleanup-branches
+  - id: diff-commits-bats-tests
+    name: diff-commits Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    additional_dependencies:
+    - bats@1.11.0
+    files: diff-commits
+  - id: diff-staged-vs-bats-tests
+    name: diff-staged-vs Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    additional_dependencies:
+    - bats@1.11.0
+    files: diff-staged-vs
+  - id: find-time-travellers-bats-tests
+    name: find-time-travellers Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    additional_dependencies:
+    - bats@1.11.0
+    files: find-time-travellers
+  - id: pull-branches-bats-tests
+    name: pull-branches Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    additional_dependencies:
+    - bats@1.11.0
+    files: pull-branches
+  - id: status-push-bats-tests
+    name: status-push Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    additional_dependencies:
+    - bats@1.11.0
+    files: status-push
+  - id: update-remote-branches-bats-tests
+    name: update-remote-branches Tests
+    entry: test/bats-precommit-wrapper
+    language: node
+    additional_dependencies:
+    - bats@1.11.0
+    files: update-remote-branches
