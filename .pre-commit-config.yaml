@@ -1,3 +1,5 @@
+ci:
+  submodules: true
 repos:
 - repo: https://github.com/shellcheck-py/shellcheck-py
   rev: v0.11.0.1
