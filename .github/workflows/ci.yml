@@ -24,8 +24,5 @@ jobs:
       - name: Setup Bats
         uses: bats-core/bats-action@4.0.0
 
-      - name: Install scripts (and dependencies)
-        run: make install
-
       - name: Run tests
         run: bats test --print-output-on-failure
