@@ -12,6 +12,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Check man page syntax
+        run: find man -type f -exec groff -man -Tutf8 -z "{}" \;
+
       - name: Install shellcheck
         run: sudo apt-get update && sudo apt-get install -y shellcheck
 
