@@ -1,5 +1,9 @@
 # git-helpers
 
+[![CI](https://github.com/pahindman/git-helpers/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/pahindman/git-helpers/actions/workflows/ci.yml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/pahindman/git-helpers/main.svg)](https://results.pre-commit.ci/latest/github/pahindman/git-helpers/main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A small collection of git subcommands that automate common repository maintenance tasks.
 
 ## Installation
