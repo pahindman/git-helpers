@@ -1,20 +1,26 @@
-.TH GIT-PULL-BRANCHES 1 "2026-10-01" "Git Helpers" "git-helpers Manual"
+.TH GIT-PULL-BRANCHES 1 "2026-10-08" "Git Helpers" "git-helpers Manual"
 .SH NAME
 git-pull-branches \- pull updates on every local branch
 .SH SYNOPSIS
 .B git pull-branches
-[B-vR]
+[\fB-n\fR | \fB--dry-run\fR]
+[\fB-v\fR | \fB--verbose\fR]
 .SH DESCRIPTION
 \fBgit-pull-branches\fR iterates through the repository's local branches, checks
 out each one in turn, and runs \fBgit pull\fR. It repeats until no branch updates
 change the repository state. The command refuses to run when there are unstaged or
 staged changes in the working tree.
 .PP
-When run with \fB-v\fR, it prints verbose progress messages to standard error.
+When run with \fB-n\fR or \fB--dry-run\fR, it reports which branches would be
+updated without checking out or pulling anything. When run with \fB-v\fR or
+\fB--verbose\fR, it prints additional progress messages to standard error.
 .SH EXAMPLES
 .TP
 .B git pull-branches
 Update all local branches from their configured remotes.
+.TP
+.B git pull-branches --dry-run
+Report which branches would be updated without changing branch state.
 .TP
 .B git pull-branches -v
 Show progress while each branch is updated.
