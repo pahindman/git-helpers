@@ -33,24 +33,24 @@ if [[ $# -gt 0 ]]; then
 	base_branch="$1"
 fi
 
-if [[ "$base_branch" == "" ]]; then
+if [[ $base_branch == "" ]]; then
 	git branch --format='%(refname:short)'
 	read -r -p "Which of the above branches do you want to treat as the base branch? " base_branch
 fi
 
-if [[ "$base_branch" == "" ]]; then
+if [[ $base_branch == "" ]]; then
 	exit 1
 fi
 
 # Get a list of all local branches that are merged into the base branch
 for branch in $(git branch --merged "${base_branch}" --format='%(refname:short)'); do
-	if [[ "$branch" != "$base_branch" ]]; then
-		if [[ "$dry_run" -eq 1 ]]; then
+	if [[ $branch != "$base_branch" ]]; then
+		if [[ $dry_run -eq 1 ]]; then
 			echo "Would delete $branch"
 			continue
 		fi
 		read -r -p "Do you want to remove $branch? (y/n) " answer
-		if [[ "$answer" == "y" ]]; then
+		if [[ $answer == "y" ]]; then
 			git branch -d "$branch"
 		fi
 	fi
