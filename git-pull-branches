@@ -8,20 +8,20 @@ while true; do
 	opt=$1
 	shift
 	case "$opt" in
-		-n|--dry-run)
-			dry_run=1
-			;;
-		-v|--verbose)
-			verbose=1
-			;;
-		--)
-			break
-			;;
-		*)
-			echo "Error: getopt was configured incorrectly." >&2
-			echo "Error: Contact the author of '$progname'." >&2
-			exit 3
-			;;
+	-n | --dry-run)
+		dry_run=1
+		;;
+	-v | --verbose)
+		verbose=1
+		;;
+	--)
+		break
+		;;
+	*)
+		echo "Error: getopt was configured incorrectly." >&2
+		echo "Error: Contact the author of '$progname'." >&2
+		exit 3
+		;;
 	esac
 done
 
@@ -39,18 +39,18 @@ fi
 
 original_branch=$(git branch --show-current)
 if [ -z "$original_branch" ]; then
-    original_branch=$(git rev-parse HEAD)
+	original_branch=$(git rev-parse HEAD)
 fi
 
 previous_branch=$(git rev-parse --abbrev-ref @\{-1\} 2>/dev/null)
 if [ -z "$previous_branch" ]; then
-    previous_branch=$(git rev-parse @\{-1\} 2>/dev/null)
+	previous_branch=$(git rev-parse @\{-1\} 2>/dev/null)
 fi
 
 restore_branch_state() {
-    [ -n "$verbose" ] && echo "Restoring branch state" >&2
-    git checkout "$previous_branch" > /dev/null 2>&1
-    git checkout "$original_branch" > /dev/null 2>&1
+	[ -n "$verbose" ] && echo "Restoring branch state" >&2
+	git checkout "$previous_branch" >/dev/null 2>&1
+	git checkout "$original_branch" >/dev/null 2>&1
 }
 
 # To use these variables as "sets", make them associate arrays
@@ -59,8 +59,8 @@ declare -A failed_branches
 made_changes=1
 
 set_exit_status() {
-    [ ${#failed_branches[@]} -gt 0 ] && exit 1
-    exit 0
+	[ ${#failed_branches[@]} -gt 0 ] && exit 1
+	exit 0
 }
 
 try_to_pull_changes_on_branch() {
@@ -69,10 +69,10 @@ try_to_pull_changes_on_branch() {
 		echo "Would try to pull branch '$branch'" >&2
 		return
 	fi
-	if git checkout "$branch" > /dev/null 2>&1; then
+	if git checkout "$branch" >/dev/null 2>&1; then
 		local before
 		before=$(git rev-parse HEAD) 2>/dev/null
-		if git pull > /dev/null 2>&1; then
+		if git pull >/dev/null 2>&1; then
 			[ -n "$verbose" ] && echo -n "Git pull on branch '$branch' worked" >&2
 			local after
 			after=$(git rev-parse HEAD) 2>/dev/null
@@ -89,8 +89,8 @@ try_to_pull_changes_on_branch() {
 			failed_branches[$branch]=$branch
 			# We don't know if 'git pull' is configured for merging or rebasing for this
 			# branch, but it doesn't matter, just abort both types
-			git merge --abort > /dev/null 2>&1
-			git rebase --abort > /dev/null 2>&1
+			git merge --abort >/dev/null 2>&1
+			git rebase --abort >/dev/null 2>&1
 		fi
 	else
 		[ -n "$verbose" ] && echo "Git checkout failed on branch '$branch'" >&2
@@ -99,42 +99,41 @@ try_to_pull_changes_on_branch() {
 }
 
 echo_num_branches() {
-    echo -n "$1 "
-    if [ "$1" -eq 1 ]; then
-        echo -n "branch"
-    else
-        echo -n "branches"
-    fi
+	echo -n "$1 "
+	if [ "$1" -eq 1 ]; then
+		echo -n "branch"
+	else
+		echo -n "branches"
+	fi
 }
 
 print_updated_branches() {
-    local num_branch_updates=${#updated_branches[@]}
-    if [ "$num_branch_updates" -ne 0 ]; then
-        echo "$(echo_num_branches "$num_branch_updates") updated:" >&2
-        for branch in "${updated_branches[@]}"; do
-            printf "\t%s\n" "$branch"
-        done
-    fi
+	local num_branch_updates=${#updated_branches[@]}
+	if [ "$num_branch_updates" -ne 0 ]; then
+		echo "$(echo_num_branches "$num_branch_updates") updated:" >&2
+		for branch in "${updated_branches[@]}"; do
+			printf "\t%s\n" "$branch"
+		done
+	fi
 }
 
 print_failed_branches() {
-    local num_failed_updates=${#failed_branches[@]}
-    if [ "$num_failed_updates" -ne 0 ]; then
-        echo "$(echo_num_branches "$num_failed_updates") failed to update:" >&2
-        for branch in "${failed_branches[@]}"; do
-            printf "\t%s\n" "$branch"
-        done
-    fi
+	local num_failed_updates=${#failed_branches[@]}
+	if [ "$num_failed_updates" -ne 0 ]; then
+		echo "$(echo_num_branches "$num_failed_updates") failed to update:" >&2
+		for branch in "${failed_branches[@]}"; do
+			printf "\t%s\n" "$branch"
+		done
+	fi
 }
 
 trap 'restore_branch_state; print_updated_branches; print_failed_branches; set_exit_status' EXIT
 
-while [ $made_changes -eq 1 ];
-do
-    made_changes=0
+while [ $made_changes -eq 1 ]; do
+	made_changes=0
 
-    # Iterate over a list of all local branches
-    for branch in $(git branch --format='%(refname:short)'); do
-        try_to_pull_changes_on_branch "$branch"
-    done
+	# Iterate over a list of all local branches
+	for branch in $(git branch --format='%(refname:short)'); do
+		try_to_pull_changes_on_branch "$branch"
+	done
 done

@@ -8,50 +8,50 @@ base_branch=""
 dry_run=0
 
 while true; do
-    opt=$1
-    shift
-    case "$opt" in
-        -n|--dry-run)
-            dry_run=1
-            ;;
-        --)
-            break
-            ;;
-        *)
-            echo "Error: getopt was configured incorrectly."
-            echo "Error: Contact the author of '$progname'."
-            exit 3
-            ;;
-    esac
+	opt=$1
+	shift
+	case "$opt" in
+	-n | --dry-run)
+		dry_run=1
+		;;
+	--)
+		break
+		;;
+	*)
+		echo "Error: getopt was configured incorrectly."
+		echo "Error: Contact the author of '$progname'."
+		exit 3
+		;;
+	esac
 done
 
 if [[ $# -gt 0 ]]; then
-    if [[ $# -gt 1 ]]; then
-        echo "Error: too many non-option arguments." >&2
-        exit 3
-    fi
-    base_branch="$1"
+	if [[ $# -gt 1 ]]; then
+		echo "Error: too many non-option arguments." >&2
+		exit 3
+	fi
+	base_branch="$1"
 fi
 
 if [[ "$base_branch" == "" ]]; then
-    git branch --format='%(refname:short)'
-    read -r -p "Which of the above branches do you want to treat as the base branch? " base_branch
+	git branch --format='%(refname:short)'
+	read -r -p "Which of the above branches do you want to treat as the base branch? " base_branch
 fi
 
 if [[ "$base_branch" == "" ]]; then
-    exit 1
+	exit 1
 fi
 
 # Get a list of all local branches that are merged into the base branch
 for branch in $(git branch --merged "${base_branch}" --format='%(refname:short)'); do
-    if [[ "$branch" != "$base_branch" ]]; then
-        if [[ "$dry_run" -eq 1 ]]; then
-            echo "Would delete $branch"
-            continue
-        fi
-        read -r -p "Do you want to remove $branch? (y/n) " answer
-        if [[ "$answer" == "y" ]]; then
-            git branch -d "$branch"
-        fi
-    fi
+	if [[ "$branch" != "$base_branch" ]]; then
+		if [[ "$dry_run" -eq 1 ]]; then
+			echo "Would delete $branch"
+			continue
+		fi
+		read -r -p "Do you want to remove $branch? (y/n) " answer
+		if [[ "$answer" == "y" ]]; then
+			git branch -d "$branch"
+		fi
+	fi
 done

@@ -5,8 +5,8 @@ refname=${1:-REBASE_HEAD}
 trap 'rm -rf "$tmp_dir"' EXIT
 tmp_dir=$(mktemp -d)
 
-git show --format=fuller "${refname}" > "$tmp_dir/${refname}"
-git diff --staged > "$tmp_dir/staged"
+git show --format=fuller "${refname}" >"$tmp_dir/${refname}"
+git diff --staged >"$tmp_dir/staged"
 
 # This script compares the staged patch with the patch from a specified commit (defaulting
 # to REBASE_HEAD if no commit is provided).  It is useful for reviewing changes during a

@@ -24,11 +24,11 @@ teardown() {
 	git config diff.tool fake
 	git config difftool.fake.cmd "true"
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "base" -q
 
-	echo staged >> tracked.txt
+	echo staged >>tracked.txt
 	git add tracked.txt
 
 	run git diff-staged-vs HEAD
@@ -39,16 +39,16 @@ teardown() {
 	git config diff.tool fake
 	git config difftool.fake.cmd "true"
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "base" -q
 
 	git checkout -b feature
-	echo feature >> tracked.txt
+	echo feature >>tracked.txt
 	git add tracked.txt
 	git commit -m "feature" -q
 
-	echo staged >> tracked.txt
+	echo staged >>tracked.txt
 	git add tracked.txt
 
 	run git diff-staged-vs HEAD~1
