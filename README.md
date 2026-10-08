@@ -32,9 +32,10 @@ make uninstall
 
 Once installed, each script is available as a git subcommand by its filename.
 
-- `git cleanup-branches [base-branch]`
+- `git cleanup-branches [-n|--dry-run] [base-branch]`
   - Deletes local branches already merged into a chosen base branch.
   - If no base branch is provided, the script lists branches and prompts for one.
+  - `--dry-run` shows which branches would be deleted without changing the repo.
 
 - `git diff-commits <commit1> <commit2>`
   - Compares two commits side by side using `git difftool --no-index`.
