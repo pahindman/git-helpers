@@ -12,8 +12,9 @@ setup() {
 	git config user.name "Test User"
 	git config user.email "test@example.com"
 
-	# Add your Git subcommand directory to PATH so `git <subcommand>` resolves local script
-	export PATH="$BATS_TEST_DIRNAME/..:$PATH"
+	# Add your Git subcommand directory and the bash-helpers library to PATH so the
+	# sourced getopt helper and local scripts resolve during tests.
+	export PATH="$BATS_TEST_DIRNAME/..:$BATS_TEST_DIRNAME/../lib/bash-helpers:$PATH"
 }
 
 teardown() {
@@ -62,4 +63,24 @@ teardown() {
 	run git branch --format='%(refname:short)'
 	assert_success
 	assert_output --partial "unmerged-branch"
+}
+
+@test "git cleanup-branches --dry-run reports branches without deleting them" {
+	touch foo.txt
+	git add foo.txt
+	git commit -m "Initial commit" -q
+	git checkout -b merged-branch
+	git checkout -b unmerged-branch
+	touch bar.txt
+	git add bar.txt
+	git commit -m "Unmerged commit" -q
+
+	run git cleanup-branches --dry-run main
+	assert_success
+	assert_output --partial "Would delete merged-branch"
+	refute_output --partial "Would delete unmerged-branch"
+
+	run git branch --format='%(refname:short)'
+	assert_success
+	assert_output --partial "merged-branch"
 }
