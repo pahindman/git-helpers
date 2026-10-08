@@ -1,17 +1,24 @@
-.TH GIT-UPDATE-REMOTE-BRANCHES 1 "2026-10-01" "Git Helpers" "git-helpers Manual"
+.TH GIT-UPDATE-REMOTE-BRANCHES 1 "2026-10-08" "Git Helpers" "git-helpers Manual"
 .SH NAME
 git-update-remote-branches \- push tracked branches to their configured remote
 .SH SYNOPSIS
 .B git update-remote-branches
+[\fB-n\fR | \fB--dry-run\fR]
 .SH DESCRIPTION
 \fBgit-update-remote-branches\fR scans the local branches, finds the remote that
 should receive pushes, and pushes any branch whose tracking state is out of sync.
 It uses \fBgit push --force-with-lease\fR and skips branches that have no remote
 tracking branch configured.
+.PP
+When run with \fB-n\fR or \fB--dry-run\fR, it reports which branches would be
+pushed without updating the remote.
 .SH EXAMPLES
 .TP
 .B git update-remote-branches
 Push all local branches that are ahead or behind their tracked remote.
+.TP
+.B git update-remote-branches --dry-run
+Report which branches would be pushed without sending anything to the remote.
 .SH SEE ALSO
 .BR git (1),
 .BR git-push (1)
