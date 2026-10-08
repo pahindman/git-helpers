@@ -25,12 +25,12 @@ teardown() {
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 	git checkout -b main
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin main -q
 
-	echo local >> tracked.txt
+	echo local >>tracked.txt
 	git add tracked.txt
 	git commit -m "local change" -q
 
@@ -44,12 +44,12 @@ teardown() {
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 	git checkout -b main
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin main -q
 
-	echo local >> tracked.txt
+	echo local >>tracked.txt
 	git add tracked.txt
 	git commit -m "local change" -q
 
@@ -67,13 +67,13 @@ teardown() {
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 	git checkout -b main
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin main -q
 
 	git checkout -b feature
-	echo local >> tracked.txt
+	echo local >>tracked.txt
 	git add tracked.txt
 	git commit -m "local branch" -q
 

@@ -24,11 +24,11 @@ teardown() {
 	git config diff.tool fake
 	git config difftool.fake.cmd "true"
 
-	echo first > foo.txt
+	echo first >foo.txt
 	git add foo.txt
 	git commit -m "first" -q
 
-	echo second >> foo.txt
+	echo second >>foo.txt
 	git add foo.txt
 	git commit -m "second" -q
 
@@ -43,7 +43,7 @@ teardown() {
 	git config diff.tool fake
 	git config difftool.fake.cmd "true"
 
-	echo hello > foo.txt
+	echo hello >foo.txt
 	git add foo.txt
 	git commit -m "initial" -q
 

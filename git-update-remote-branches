@@ -20,33 +20,33 @@ while true; do
 	opt=$1
 	shift
 	case "$opt" in
-		-n|--dry-run)
-			dry_run=1
-			;;
-		--)
-			break
-			;;
-		*)
-			echo "Error: getopt was configured incorrectly." >&2
-			echo "Error: Contact the author of '$progname'." >&2
-			exit 3
-			;;
+	-n | --dry-run)
+		dry_run=1
+		;;
+	--)
+		break
+		;;
+	*)
+		echo "Error: getopt was configured incorrectly." >&2
+		echo "Error: Contact the author of '$progname'." >&2
+		exit 3
+		;;
 	esac
 done
 
 exit_code=0
 
 for local_branch in $(git branch --format='%(refname:short)'); do
-	push_remote=$(git config --get "branch.$local_branch.pushRemote" 2>/dev/null || \
-		git config --get remote.pushDefault 2>/dev/null || \
+	push_remote=$(git config --get "branch.$local_branch.pushRemote" 2>/dev/null ||
+		git config --get remote.pushDefault 2>/dev/null ||
 		git config --get "branch.$local_branch.remote" 2>/dev/null)
 	tracking_branch="refs/remotes/${push_remote}/$local_branch"
 	if git cat-file -e "$tracking_branch" 2>/dev/null; then
 		behind=$(git rev-list --count "$local_branch..$tracking_branch" 2>/dev/null)
 		ahead=$(git rev-list --count "$tracking_branch..$local_branch" 2>/dev/null)
-		if (( ahead > 0 || behind > 0 )); then
+		if ((ahead > 0 || behind > 0)); then
 			verbose -n "Pushing $local_branch [$push_remote: behind $behind, ahead $ahead]... "
-			if (( dry_run )); then
+			if ((dry_run)); then
 				echo "Would push $local_branch to $push_remote" >&2
 				continue
 			fi

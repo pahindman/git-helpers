@@ -24,18 +24,18 @@ teardown() {
 	git init -q --bare "$BATS_TEST_TMPDIR/remote.git"
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin HEAD:main -q
 
 	git checkout -b feature
-	echo feature >> tracked.txt
+	echo feature >>tracked.txt
 	git add tracked.txt
 	git commit -m "feature" -q
 	git push -u origin feature -q
 
-	echo more >> tracked.txt
+	echo more >>tracked.txt
 	git add tracked.txt
 	git commit -m "ahead" -q
 
@@ -49,7 +49,7 @@ teardown() {
 	git init -q --bare "$BATS_TEST_TMPDIR/remote.git"
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin HEAD:main -q

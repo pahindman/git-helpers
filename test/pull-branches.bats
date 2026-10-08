@@ -25,7 +25,7 @@ teardown() {
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 	git checkout -b main
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin main -q
@@ -35,11 +35,11 @@ teardown() {
 }
 
 @test "git pull-branches rejects a dirty worktree" {
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 
-	echo dirty >> tracked.txt
+	echo dirty >>tracked.txt
 
 	run git pull-branches
 	assert_failure
@@ -51,13 +51,13 @@ teardown() {
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
 	git checkout -b main
 
-	echo base > tracked.txt
+	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
 	git push -u origin main -q
 
 	git checkout -b feature
-	echo feature >> tracked.txt
+	echo feature >>tracked.txt
 	git add tracked.txt
 	git commit -m "feature commit" -q
 

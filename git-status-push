@@ -22,16 +22,16 @@ CYAN=$'\033[0;36m'
 NC=$'\033[0m' # No Color
 
 for local_branch in $(git branch --format='%(refname:short)'); do
-	push_remote=$(git config --get "branch.$local_branch.pushRemote" 2>/dev/null || \
-                      git config --get remote.pushDefault 2>/dev/null || \
-                      git config --get "branch.$local_branch.remote" 2>/dev/null)
+	push_remote=$(git config --get "branch.$local_branch.pushRemote" 2>/dev/null ||
+		git config --get remote.pushDefault 2>/dev/null ||
+		git config --get "branch.$local_branch.remote" 2>/dev/null)
 	tracking_branch="refs/remotes/${push_remote}/$local_branch"
 	if git cat-file -e "$tracking_branch" 2>/dev/null; then
-			suffix_msg=""
+		suffix_msg=""
 	else
-			tracking_branch=$(git config --get "branch.$local_branch.merge" 2>/dev/null)
-			abbrev_tracking_branch=$(git rev-parse --abbrev-ref "$tracking_branch")
-			suffix_msg=" ${CYAN}(tracking local $abbrev_tracking_branch)$NC"
+		tracking_branch=$(git config --get "branch.$local_branch.merge" 2>/dev/null)
+		abbrev_tracking_branch=$(git rev-parse --abbrev-ref "$tracking_branch")
+		suffix_msg=" ${CYAN}(tracking local $abbrev_tracking_branch)$NC"
 	fi
 
 	behind=$(git rev-list --count "$local_branch..$tracking_branch" 2>/dev/null)
