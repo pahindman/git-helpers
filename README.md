@@ -47,9 +47,10 @@ Once installed, each script is available as a git subcommand by its filename.
   - Lists commits where the commit date is more than `DAYS` after the author date, or where the commit date is earlier than the author date.
   - Defaults to `14` days and `HEAD`.
 
-- `git pull-branches`
+- `git pull-branches [-n|--dry-run]`
   - Checks out each local branch and runs `git pull`, repeating until no branch changes.
   - Refuses to run when working tree or index changes are present.
+  - `--dry-run` reports which branches would be pulled without modifying any branch state.
 
 - `git status-push`
   - Prints each local branch's status relative to its push remote, including ahead/behind counts.

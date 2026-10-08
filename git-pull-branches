@@ -1,6 +1,29 @@
 #!/usr/bin/env bash
 
-[ "${1:0:2}" == "-v" ] && verbose=1
+progname=${0##*/}
+# shellcheck disable=SC1091
+source getopt.bash "nv" "dry-run,verbose" "$progname" "$@"
+
+while true; do
+	opt=$1
+	shift
+	case "$opt" in
+		-n|--dry-run)
+			dry_run=1
+			;;
+		-v|--verbose)
+			verbose=1
+			;;
+		--)
+			break
+			;;
+		*)
+			echo "Error: getopt was configured incorrectly." >&2
+			echo "Error: Contact the author of '$progname'." >&2
+			exit 3
+			;;
+	esac
+done
 
 if ! git diff --quiet; then
 	echo "error: cannot pull-branches: You have unstaged changes." >&2
@@ -41,8 +64,12 @@ set_exit_status() {
 }
 
 try_to_pull_changes_on_branch() {
-    local branch="$1"
-    if git checkout "$branch" > /dev/null 2>&1; then
+	local branch="$1"
+	if [ -n "$dry_run" ]; then
+		echo "Would try to pull branch '$branch'" >&2
+		return
+	fi
+	if git checkout "$branch" > /dev/null 2>&1; then
 		local before
 		before=$(git rev-parse HEAD) 2>/dev/null
 		if git pull > /dev/null 2>&1; then
