@@ -50,7 +50,7 @@ $(MAN_DIR):
 	@mkdir -p $(MAN_DIR)
 
 #### UNINSTALL TARGETS ####
-.PHONY: uninstall uninstall-scripts uninstall-manpages 
+.PHONY: uninstall uninstall-scripts uninstall-manpages
 
 uninstall: uninstall-manpages uninstall-scripts uninstall-helpers
 
