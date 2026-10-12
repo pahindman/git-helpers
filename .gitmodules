@@ -5,5 +5,5 @@
 	path = test/test_helper/bats-assert
 	url = https://github.com/bats-core/bats-assert.git
 [submodule "lib/bash-helpers"]
-	path = lib/bash-helpers
+	path = lib/bash-libs
 	url = https://github.com/pahindman/bash-helpers.git

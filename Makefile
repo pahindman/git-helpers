@@ -107,12 +107,12 @@ uninstall-manpages:
 		fi; \
 	done
 
-HELPER_DIR ?= lib/bash-helpers
+HELPER_DIR ?= lib/bash-libs
 
 # Ensure helper Makefile exists before delegating
 $(HELPER_DIR)/Makefile:
 	@if [ ! -f "$@" ]; then \
-		echo "Initializing bash-helpers submodule..."; \
+		echo "Initializing bash-libs submodule..."; \
 		git submodule update --init --recursive; \
 	fi
 

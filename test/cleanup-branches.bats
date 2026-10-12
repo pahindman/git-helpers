@@ -12,9 +12,9 @@ setup() {
 	git config user.name "Test User"
 	git config user.email "test@example.com"
 
-	# Add your Git subcommand directory and the bash-helpers library to PATH so the
+	# Add your Git subcommand directory and the bash-libs library to PATH so the
 	# sourced getopt helper and local scripts resolve during tests.
-	export PATH="$BATS_TEST_DIRNAME/..:$BATS_TEST_DIRNAME/../lib/bash-helpers:$PATH"
+	export PATH="$BATS_TEST_DIRNAME/..:$BATS_TEST_DIRNAME/../lib/bash-libs:$PATH"
 }
 
 teardown() {
