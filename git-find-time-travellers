@@ -8,7 +8,7 @@
 progname=${0##*/}
 
 # shellcheck disable=SC1091
-source getopt.bash "d:" "days:" "$progname" "$@"
+source "$BASH_LIB_DIR/getopt.bash" "d:" "days:" "$progname" "$@"
 
 days=14
 

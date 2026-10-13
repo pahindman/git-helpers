@@ -11,7 +11,8 @@ setup() {
 	git init -q
 	git config user.name "Test User"
 	git config user.email "test@example.com"
-	export PATH="$BATS_TEST_DIRNAME/..:$BATS_TEST_DIRNAME/../lib/bash-libs:$PATH"
+	export PATH="$BATS_TEST_DIRNAME/..:$PATH"
+	export BASH_LIB_DIR="$BATS_TEST_DIRNAME/../lib/bash-libs"
 }
 
 teardown() {

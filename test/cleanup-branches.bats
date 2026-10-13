@@ -14,7 +14,8 @@ setup() {
 
 	# Add your Git subcommand directory and the bash-libs library to PATH so the
 	# sourced getopt helper and local scripts resolve during tests.
-	export PATH="$BATS_TEST_DIRNAME/..:$BATS_TEST_DIRNAME/../lib/bash-libs:$PATH"
+	export PATH="$BATS_TEST_DIRNAME/..:$PATH"
+	export BASH_LIB_DIR="$BATS_TEST_DIRNAME/../lib/bash-libs"
 }
 
 teardown() {

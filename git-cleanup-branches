@@ -2,7 +2,7 @@
 
 progname=${0##*/}
 # shellcheck disable=SC1091
-source getopt.bash "n" "dry-run" "$progname" "$@"
+source "$BASH_LIB_DIR/getopt.bash" "n" "dry-run" "$progname" "$@"
 
 base_branch=""
 dry_run=0

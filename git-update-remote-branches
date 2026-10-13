@@ -2,7 +2,7 @@
 
 progname=${0##*/}
 # shellcheck disable=SC1091
-source getopt.bash "n" "dry-run" "$progname" "$@"
+source "$BASH_LIB_DIR/getopt.bash" "n" "dry-run" "$progname" "$@"
 
 # This custom subcommand gives you an easy way to push branches that already have a remote
 # branch configured, i.e. it should not create new remote branches.  It considers, in

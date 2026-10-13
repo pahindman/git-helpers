@@ -2,7 +2,7 @@
 
 progname=${0##*/}
 # shellcheck disable=SC1091
-source getopt.bash "nv" "dry-run,verbose" "$progname" "$@"
+source "$BASH_LIB_DIR/getopt.bash" "nv" "dry-run,verbose" "$progname" "$@"
 
 while true; do
 	opt=$1
