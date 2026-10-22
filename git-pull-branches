@@ -26,13 +26,13 @@ while true; do
 done
 
 if ! git diff --quiet; then
-	echo "error: cannot pull-branches: You have unstaged changes." >&2
+	echo "error: cannot pull-branches: There are unstaged changes." >&2
 	echo "error: Please commit or stash them." >&2
 	exit 1
 fi
 
 if ! git diff --quiet --staged; then
-	echo "error: cannot pull-branches: Your index contains uncommitted changes." >&2
+	echo "error: cannot pull-branches: The index contains uncommitted changes." >&2
 	echo "error: Please commit or stash them." >&2
 	exit 1
 fi
