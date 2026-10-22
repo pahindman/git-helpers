@@ -47,6 +47,19 @@ teardown() {
 	assert_output --partial "unstaged changes"
 }
 
+@test "git pull-branches fails fast when the index has uncommitted changes" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	echo dirty >>tracked.txt
+	git add tracked.txt
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "uncommitted changes"
+}
+
 @test "git pull-branches --dry-run prints branches without changing state" {
 	git init -q --bare "$BATS_TEST_TMPDIR/remote.git"
 	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
