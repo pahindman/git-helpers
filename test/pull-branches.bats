@@ -35,7 +35,7 @@ teardown() {
 	assert_success
 }
 
-@test "git pull-branches rejects a dirty worktree" {
+@test "git pull-branches fails fast when the worktree has unstaged changes" {
 	echo base >tracked.txt
 	git add tracked.txt
 	git commit -m "initial" -q
