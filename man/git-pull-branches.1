@@ -8,8 +8,10 @@ git-pull-branches \- pull updates on every local branch
 .SH DESCRIPTION
 \fBgit-pull-branches\fR iterates through the repository's local branches, checks
 out each one in turn, and runs \fBgit pull\fR. It repeats until no branch updates
-change the repository state. The command refuses to run when there are unstaged or
-staged changes in the working tree.
+change the repository state.
+.PP
+The command refuses to run when there are uncommitted changes in the working tree,
+or if there is an ongoing merge, rebase, cherry-pick, revert, or bisect operation.
 .PP
 When run with \fB-n\fR or \fB--dry-run\fR, it reports which branches would be
 updated without checking out or pulling anything. When run with \fB-v\fR or
