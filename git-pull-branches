@@ -25,6 +25,12 @@ while true; do
 	esac
 done
 
+git_dir=$(git rev-parse --git-dir 2>/dev/null)
+if [ -z "$git_dir" ]; then
+	echo "error: cannot pull-branches: Not a git repository." >&2
+	exit 1
+fi
+
 if ! git diff --quiet; then
 	echo "error: cannot pull-branches: There are unstaged changes." >&2
 	echo "error: Please commit or stash them." >&2

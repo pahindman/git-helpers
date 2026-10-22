@@ -35,6 +35,14 @@ teardown() {
 	assert_success
 }
 
+@test "git pull-branches fails fast when not in a git repository" {
+	cd "$BATS_TEST_TMPDIR" || return 1
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "Not a git repository"
+}
+
 @test "git pull-branches fails fast when the worktree has unstaged changes" {
 	echo base >tracked.txt
 	git add tracked.txt
