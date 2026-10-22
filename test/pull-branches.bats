@@ -92,3 +92,93 @@ teardown() {
 	assert_success
 	assert_output "feature"
 }
+
+@test "git pull-branches fails fast when bisect operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git bisect start
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}
+
+@test "git pull-branches fails fast when cherry-pick operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git_dir=$(git rev-parse --git-dir)
+	git rev-parse HEAD >"$git_dir/CHERRY_PICK_HEAD"
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}
+
+@test "git pull-branches fails fast when merge operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git_dir=$(git rev-parse --git-dir)
+	git rev-parse HEAD >"$git_dir/MERGE_HEAD"
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}
+
+@test "git pull-branches fails fast when rebase operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git_dir=$(git rev-parse --git-dir)
+	git rev-parse HEAD >"$git_dir/REBASE_HEAD"
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}
+
+@test "git pull-branches fails fast when rebase-apply operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git_dir=$(git rev-parse --git-dir)
+	mkdir -p "$git_dir/rebase-apply"
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}
+
+@test "git pull-branches fails fast when rebase-merge operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git_dir=$(git rev-parse --git-dir)
+	mkdir -p "$git_dir/rebase-merge"
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}
+
+@test "git pull-branches fails fast when revert operation is in-progress" {
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+
+	git_dir=$(git rev-parse --git-dir)
+	git rev-parse HEAD >"$git_dir/REVERT_HEAD"
+
+	run git pull-branches
+	assert_failure
+	assert_output --partial "cannot pull-branches"
+}

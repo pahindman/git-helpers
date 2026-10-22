@@ -31,6 +31,28 @@ if [ -z "$git_dir" ]; then
 	exit 1
 fi
 
+repository_is_ready() {
+	# Check for marker files/directories of ongoing operations
+	for marker in MERGE_HEAD REBASE_HEAD CHERRY_PICK_HEAD REVERT_HEAD BISECT_START; do
+		if [ -e "$(git rev-parse --git-path "$marker")" ]; then
+			echo "error: cannot pull-branches: a git operation is in progress ($marker found)." >&2
+			return 1
+		fi
+	done
+
+	# Check for rebase state directories (interactive or regular rebase)
+	if [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]; then
+		echo "error: cannot pull-branches: a git rebase is in progress." >&2
+		return 1
+	fi
+	return 0
+}
+
+if ! repository_is_ready; then
+	echo "hint: Please complete or abort it first." >&2
+	exit 1
+fi
+
 if ! git diff --quiet; then
 	echo "error: cannot pull-branches: There are unstaged changes." >&2
 	echo "error: Please commit or stash them." >&2
