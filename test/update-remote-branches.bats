@@ -82,3 +82,26 @@ teardown() {
 	assert_success
 	refute_output --partial "Pushed feature to origin"
 }
+
+@test "git update-remote-branches passes args through to git push" {
+	git init -q --bare "$BATS_TEST_TMPDIR/remote.git"
+	git remote add origin "$BATS_TEST_TMPDIR/remote.git"
+	git checkout -b main
+
+	echo base >tracked.txt
+	git add tracked.txt
+	git commit -m "initial" -q
+	git push -u origin main -q
+
+	echo local >>tracked.txt
+	git add tracked.txt
+	git commit -m "local change" -q
+
+	run git update-remote-branches -- --dry-run
+	assert_success
+	assert_output --partial "Pushed main to origin"
+
+	run git rev-list --count origin/main..main
+	assert_success
+	assert_output "1"
+}

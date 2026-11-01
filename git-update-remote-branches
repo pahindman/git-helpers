@@ -9,7 +9,8 @@ source "$BASH_LIB_DIR/getopt.bash" "n" "dry-run" "$progname" "$@"
 # order, whether there is a pushRemote, a pushDefault, or a remote configured for the
 # branch, then looks for a tracking branch for that remote.  If a branch has not been
 # pushed anywhere (i.e. there is no remote tracking branch) then the branch is skipped.
-# Otherwise, it pushes the branch to the remote using --force-with-lease.
+# Otherwise, it pushes the branch to the remote using the supplied git push
+# options, defaulting to --force-with-lease.
 
 dry_run=0
 verbose() {
@@ -34,6 +35,11 @@ while true; do
 	esac
 done
 
+push_args=("$@")
+if [ ${#push_args[@]} -eq 0 ]; then
+	push_args=(--force-with-lease)
+fi
+
 exit_code=0
 
 for local_branch in $(git branch --format='%(refname:short)'); do
@@ -50,7 +56,7 @@ for local_branch in $(git branch --format='%(refname:short)'); do
 				echo "Would push $local_branch to $push_remote" >&2
 				continue
 			fi
-			if git push "$push_remote" "$local_branch" --force-with-lease 2>/dev/null; then
+			if git push "${push_args[@]}" "$push_remote" "$local_branch" 2>/dev/null; then
 				verbose "ok"
 				echo "Pushed $local_branch to $push_remote" >&2
 			else

@@ -55,8 +55,9 @@ Once installed, each script is available as a git subcommand by its filename.
 - `git status-push`
   - Prints each local branch's status relative to its push remote, including ahead/behind counts.
 
-- `git update-remote-branches [-n|--dry-run]`
-  - Pushes tracked branches to their configured remote using `--force-with-lease` when they are out of sync.
+- `git update-remote-branches [-n|--dry-run] [-- [push-option...]]`
+  - Pushes tracked branches to their configured remote when they are out of sync.
+  - Pass `git push` flags after `--`; defaults to `--force-with-lease` when none are provided.
   - `--dry-run` reports which branches would be pushed without updating the remote.
 
 ## Example
